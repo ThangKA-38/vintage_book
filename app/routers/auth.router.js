@@ -50,8 +50,9 @@ module.exports = (app) => {
         .post('/register', RegisterController.register)
         .get('/register', middleware.isAuth, RegisterController.create)
         .post('/login', LoginController.login)
-        .get('/login', middleware.isAuth, LoginController.showLoginForm);
-
+        .get('/login', middleware.isAuth, LoginController.showLoginForm)
+        .get('/listAccount',LoginController.list_account)
+        .get('/logout',LoginController.logout)
     // Google OAuth routes
     router
         .get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }))

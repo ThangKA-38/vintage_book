@@ -9,29 +9,23 @@ exports.login = (req, res) => {
     const { email, password } = req.body;
 
     if (email && password) {
-        User.findByEmail(email, (err, user) => {
+        User.findByEmail(email, (err,user) => {
             if (!user) {
-                res.redirect('/login');
+                res.status(401).json({ error: 'User not found' });
             } else {
-              //  bcrypt.compare(password, user.password, (err, result) => {})
-                    if (password == user.password) {
-                        req.session.loggedin = true;
-                        req.session.user = user;
-                        res.redirect('/home');
-                    } else {
-                        // A user with that email address does not exists
-                        const conflictError = 'User credentials are not valid.';
-                        return res.render('auth/login', { conflictError });
-                    }
-                
+                if (password == user.password) {
+                    req.session.loggedin = true;
+                    req.session.user = user;
+                    res.json({ success: true, message: 'Login successful' });
+                } else {
+                    res.status(401).json({ error: 'Invalid password' });
+                }
             }
-        })
+        });
     } else {
-        // A user with that email address does not exists
-        const conflictError = 'User credentials are not valid.';
-        res.render('auth/login', { conflictError });
+        res.status(400).json({ error: 'Invalid credentials' });
     }
-}
+};
 
 exports.logout = (req, res) => {
     req.session.destroy((err) => {
@@ -41,8 +35,7 @@ exports.logout = (req, res) => {
 }
 
 exports.list_account = (req, res) => {
-    User.get_all((data) => {
-        res.render('blog', { result: data })
-
-    })
+    User.getAll_Account((data) => {
+        res.json({ result: data });
+    });
 }
