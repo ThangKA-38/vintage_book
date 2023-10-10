@@ -7,10 +7,11 @@ exports.create = (req, res) => {
 
 exports.getAll = (req,res)=>{
     User.getAll_Account((data) =>{
-        return res.render('success', { dataUser: data });
+    return res.json({ dataUser: data });
 
     })
 }
+
 exports.register = (req, res) => {
     const { username, email, password, role_id } = req.body;
     const parsedRoleId = parseInt(role_id);

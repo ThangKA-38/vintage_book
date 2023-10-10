@@ -17,6 +17,7 @@ exports.login = (req, res) => {
                     req.session.loggedin = true;
                     req.session.user = user;
                     res.json({ success: true, message: 'Login successful' });
+                 
                 } else {
                     res.status(401).json({ error: 'Invalid password' });
                 }
