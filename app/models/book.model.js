@@ -99,6 +99,7 @@ Book.Remove = (id, result) => {
 //     })
 // }
 
+//thêm ảnh và file 
 Book.upload = (newData, result) => {
     const db = 'INSERT INTO booK_img_file (book_id, file_path, image_path) VALUES(?,?,?)';
     sql.query(db, newData, (err, book) => {
