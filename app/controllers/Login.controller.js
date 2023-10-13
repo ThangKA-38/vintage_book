@@ -9,7 +9,7 @@ exports.login = (req, res) => {
     const { email, password } = req.body;
 
     if (email && password) {
-        User.findByEmail(email, (err,user) => {
+        User.findByEmail(email, (err, user) => {
             if (!user) {
                 res.status(401).json({ error: 'User not found' });
             } else {
@@ -17,7 +17,7 @@ exports.login = (req, res) => {
                     req.session.loggedin = true;
                     req.session.user = user;
                     res.json({ success: true, message: 'Login successful' });
-                 
+
                 } else {
                     res.status(401).json({ error: 'Invalid password' });
                 }

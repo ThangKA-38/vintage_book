@@ -8,7 +8,7 @@ module.exports = (app) => {
     const middleware = require('../middleware/auth.middleware');
     const passport = require('passport');
     const db = require('../models/db');
-   
+
 
     // Serialize and deserialize user
     passport.serializeUser(function (user, cb) {
@@ -47,12 +47,13 @@ module.exports = (app) => {
 
     // Register and Login routes
     router
+        .get('/login', middleware.isAuth, LoginController.showLoginForm)
+        .post('/login', LoginController.login)
         .post('/register', RegisterController.register)
         .get('/register', middleware.isAuth, RegisterController.create)
-        .post('/login', LoginController.login)
-        .get('/login', middleware.isAuth, LoginController.showLoginForm)
-        .get('/listAccount',LoginController.list_account)
-        .get('/logout',LoginController.logout)
+        .get('/listAccount', LoginController.list_account)
+        .get('/logout', middleware.loggedin, LoginController.logout)
+        .get('/loginByGoogle');
     // Google OAuth routes
     router
         .get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
@@ -68,8 +69,8 @@ module.exports = (app) => {
                     if (loginErr) {
                         return next(loginErr);
                     }
-                    res.status(201).json({user});
-                   // return res.redirect('/ggUser'); // Redirect to the homepage after successful login
+                    res.status(201).json({ user });
+
                 });
             })(req, res, next);
         });
