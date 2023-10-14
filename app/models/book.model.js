@@ -17,9 +17,7 @@ Book.getAllBook = (result) => {
     LEFT JOIN book_img_file  
     ON book.book_id = book_img_file.book_id
     GROUP BY book.book_id,book.book_title,book.price, book_img_file.image_path
-    
     `
-
     sql.query(db, (err, book) => {
         if (err) {
             result(err, null)
@@ -39,7 +37,7 @@ Book.findByID = (id, result) => {
     LEFT JOIN book_category 
     ON book.category_id = book_category.category_id
     HAVING book.book_id=${id}
-    `
+    `;
     sql.query(db, (err, book) => {
         if (err) {
             result(err, null)
@@ -112,4 +110,27 @@ Book.upload = (newData, result) => {
     })
 }
 
+Book.category = (id, result) => {
+    const db = `
+        SELECT
+        book.book_id,
+        book.book_title,
+        book.price,
+        book_img_file.image_path,
+        book.category_id
+    FROM
+        book
+    LEFT JOIN book_img_file ON book.book_id = book_img_file.book_id
+    LEFT JOIN book_category ON book.category_id = book_category.category_id
+    WHERE
+    book.category_id = ${id}
+    `
+    sql.query(db, (err, book) => {
+        if (err) {
+            result(err, null)
+        } else {
+            result(book)
+        }
+    })
+}
 module.exports = Book;

@@ -35,6 +35,7 @@ module.exports = app => {
     router.get('/book', middleware.loggedin, controller.ShowBook)
         .get('/detail_book/:id', middleware.loggedin, controller.detailBooK)
         .post('/remove_book/:id', middleware.loggedin, controller.removeBook)
+        .get('/category/:id', controller.categoryBook)
         .post('/upload', middleware.loggedin, upload.fields([{ name: 'fileElem' }, { name: 'myImage' }]), controller.uploadFile)
     app.use(router);
 }

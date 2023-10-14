@@ -6,13 +6,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vintage</title>
     <style>
-        .uploadFile{
-            margin-top: 20px;
-        }
+  /* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-         button{
-            margin-top: 15px;
-        }
+/* Set a background image for the whole page */
+body {
+    background: url('your-background-image.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: #333;
+}
+
+/* Style the header containing the title and logout button */
+h1 {
+    font-size: 36px;
+    margin: 20px;
+    color: #fff; /* Change to your desired text color */
+}
+
+#renderButton {
+    background: #007bff; /* Change to your desired button color */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#renderButton:hover {
+    background: #0056b3; /* Change to your desired hover color */
+}
+
+/* Style the upload section */
+.uploadFile {
+    background: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 80%;
+    max-width: 400px;
+}
+
+.uploadFile h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.fileElem {
+    margin: 10px 0;
+}
+
+/* Style the form for adding a book */
+.addBook label {
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.addBook input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.addBook button[type="submit"] {
+    background: #007bff; /* Change to your desired button color */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+.addBook button[type="submit"]:hover {
+    background: #0056b3; /* Change to your desired hover color */
+}
+
     </style>
 </head>
 <body>
@@ -30,9 +109,32 @@
             <h3>Image</h3>
             <input type="file" name="myImage"/><br />
 
-            <button type="submit">Upload</button>
+            <button type="submit">Upload</button> <br />
+
+            <div class="addBook">
+            <form action="/add_book" method="post">
+                <label for="book_title">Book Title:</label>
+                <input type="text" id="book_title" name="book_title" required><br>
+        
+                <label for="author">Author:</label>
+                <input type="text" id="author" name="author" required><br>
+        
+                <label for="publication_year">Publication Year:</label>
+                <input type="text" id="publication_year" name="publication_year" required><br>
+        
+                <label for="price">Price:</label>
+                <input type="text" id="price" name="price" required><br>
+        
+                <label for="supplier_id">Supplier ID:</label>
+                <input type="text" id="supplier_id" name="supplier_id" required><br>
+        
+                <label for="category_id">Category ID:</label>
+                <input type="text" id="category_id" name="category_id" required><br>
+        
+                <button type="submit">Add Book</button>
+            </form>
         </form>
-            
+    </div>
     </div>
 
 
