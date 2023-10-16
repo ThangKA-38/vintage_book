@@ -20,6 +20,7 @@ exports.detailBooK = (req, res, err) => {
   })
 }
 
+//hiển hị dữ liệu danh mục ra cho trang tạo 
 exports.formAddBook = (req, res) => {
   Book.getCategory((data) => {
     res.render('createForm.ejs', { dataBook: data })
@@ -34,14 +35,17 @@ exports.createNewBook = (req, res) => {
     price: req.body.price,
     // category_id: req.body.category,
   };
+  //ktra xem ng dùng có nhập danh mục mới không
   if (req.body.newCategory) {
     const newCategoryData = {
       category_name: req.body.newCategory,
     };
+    // thêm vào db danh mục
     Book.addCategory(newCategoryData, (err, newCategory) => {
       if (err) {
         res.status(401).json(err);
       } else {
+        // lấy id của danh mục mới vào bảng db sách
         newData.category_id = newCategory.id;
         Book.addBook(newData, (err) => {
           if (err) {
@@ -53,6 +57,7 @@ exports.createNewBook = (req, res) => {
       }
     })
   } else {
+    // trường hợp không có danh mục mới
     newData.category_id = req.body.category;
     Book.addBook(newData, (err) => {
       if (err) {
