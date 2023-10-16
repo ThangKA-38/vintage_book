@@ -31,6 +31,8 @@ module.exports = app => {
         res.render('home.ejs')
     })
 
+    router.get('/formaddbook', controller.formAddBook)
+        .post('/addbook', controller.createNewBook)
 
     router.get('/book', middleware.loggedin, controller.ShowBook)
         .get('/detail_book/:id', middleware.loggedin, controller.detailBooK)

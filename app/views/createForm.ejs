@@ -68,6 +68,7 @@ h1 {
     margin: 10px 0;
     display: block;
     color: #333;
+    float: left;
 }
 
 .addBook input {
@@ -128,6 +129,7 @@ h1 {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
+    float: left;
 }
 
 .fileElem {
@@ -155,9 +157,67 @@ h1 {
         </style>
 </head>
 <body>
-    <h1>VINTAGE BOOK</h1>
+    <h1>CREATE BOOK</h1>
   
     <button id="renderButton">LOG OUT</button>
+
+    
+    <div class="addBook">
+        <form action="/addbook" method="POST">
+                    <label for="bookTitle">Title:</label>
+            <input type="text" id="bookTitle" name="bookTitle">
+            <br>
+            <label for="author">Author:</label>
+            <input type="text" id="author" name="author">
+            <br>
+            <label for="publicationYear">Publication Year:</label>
+            <input type="date" id="publicationYear" name="publicationYear">
+            
+            <br>
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" step="0.01" min="0" max="1000">
+            
+            <br>
+            <!-- Add a select element for displaying existing categories -->
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="default">Chọn thể loại</option>
+                <% const uniqueCategories = new Set(); %>
+                <% for (let i = 0; i < dataBook.length; i++) { %>
+                    <% const category = dataBook[i].category_name; %>
+                    <% if (!uniqueCategories.has(category)) { %>
+                        <% uniqueCategories.add(category); %>
+                        <option value="<%= dataBook[i].category_id %>"><%= category %></option>
+                    <% } %>
+                <% } %>
+            </select>
+            <br>
+            <!-- Add an input element for adding a new category -->
+            <label for="newCategory">New Category:</label>
+            <input type="text" id="newCategory" name="newCategory">
+            <br>
+                    <br>
+            <button type="submit">Add Book</button>
+         </form>
+    </div>
+            
+    <div class="uploadFile">
+        <h3>Upload File and Image</h3>
+        <form class="fileUpload" action="/upload" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="fileElem">Select File:</label>
+                <input type="file" class="fileElem" name="fileElem" id="fileElem">
+            </div>
+    
+            <div class="form-group">
+                <label for="myImage">Select Image:</label>
+                <input type="file" class="fileElem" name="myImage" id="myImage">
+            </div>
+    
+            <button type="submit" class="submitButton">Upload</button>
+        </form>
+    </div>
+    </div>
 
 
     

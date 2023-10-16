@@ -20,6 +20,53 @@ exports.detailBooK = (req, res, err) => {
   })
 }
 
+exports.formAddBook = (req, res) => {
+  Book.getCategory((data) => {
+    res.render('createForm.ejs', { dataBook: data })
+  })
+}
+
+exports.createNewBook = (req, res) => {
+  const newData = {
+    book_title: req.body.bookTitle,
+    author: req.body.author,
+    publication_year: req.body.publicationYear,
+    price: req.body.price,
+    // category_id: req.body.category,
+  };
+  if (req.body.newCategory) {
+    const newCategoryData = {
+      category_name: req.body.newCategory,
+    };
+    Book.addCategory(newCategoryData, (err, newCategory) => {
+      if (err) {
+        res.status(401).json(err);
+      } else {
+        newData.category_id = newCategory.id;
+        Book.addBook(newData, (err) => {
+          if (err) {
+            res.status(401).json(err);
+          } else {
+            res.json({ message: 'Thêm Thành công' });
+          }
+        });
+      }
+    })
+  } else {
+    newData.category_id = req.body.category;
+    Book.addBook(newData, (err) => {
+      if (err) {
+        res.status(401).json(err);
+      } else {
+        res.json({ message: 'Thêm Thành công' });
+      }
+    });
+  }
+}
+
+
+
+
 //xóa sách 
 exports.removeBook = (req, res) => {
   var id = req.params.id;
@@ -36,10 +83,6 @@ exports.uploadFile = (req, res, err) => {
     return res.status(400).send('Please select both files to upload');
   }
 
-  // for (let i = 0; i <= 3; i++) {
-  //   var Book_id = Math.floor(Math.random() * 3);
-
-  // }
   Book_id = req.params.id;
   var fileBook = req.files['fileElem'][0].filename;
   var fileIMG = req.files['myImage'][0].filename;
@@ -51,7 +94,8 @@ exports.uploadFile = (req, res, err) => {
 //lấy theo danh mục sách
 exports.categoryBook = (req, res) => {
   var id = req.params.id;
-  Book.category(id, (data) => {
-    res.status(200).json({ category: data });
+  Book.getByCategoryID(id, (data) => {
+    //res.status(200).json({ category: data });
+    res.render({ Data: data })
   })
 }

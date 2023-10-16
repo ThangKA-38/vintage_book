@@ -15,3 +15,13 @@ exports.isAuth = (req, res, next) => {
         next();
     }
 }
+
+exports.checkRole = (role) => {
+    return (req, res, next) => {
+        if (req.user && req.user.role === role) {
+            // Người dùng có vai trò tương ứng
+            return next();
+        }
+        res.status(403).json({ message: 'Access denied' });
+    };
+}

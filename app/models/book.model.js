@@ -12,11 +12,14 @@ const Book = (book) => {
 //lấy tất cả sách trong db ra 
 Book.getAllBook = (result) => {
     const db = `
-    SELECT  book.book_id,book.book_title,book.price, book_img_file.image_path
-    from book 
+    SELECT  
+    book.book_id,book.book_title,book.price, book_img_file.image_path,book_img_file.file_image_id,book_category.category_name,book_category.category_id
+    FROM book 
     LEFT JOIN book_img_file  
     ON book.book_id = book_img_file.book_id
-    GROUP BY book.book_id,book.book_title,book.price, book_img_file.image_path
+    LEFT JOIN book_category
+    ON book.category_id = book_category.category_id
+    GROUP BY book.book_id,book.book_title,book.price, book_img_file.image_path,book_category.category_name,book_category.category_id
     `
     sql.query(db, (err, book) => {
         if (err) {
@@ -60,8 +63,8 @@ Book.findByNameBook = (data, result) => {
 }
 
 //thêm sách 
-Book.Create = (newData, result) => {
-    sql('INSERT INTO book SET = ?', newData, (err, book) => {
+Book.addBook = (newData, result) => {
+    sql.query('INSERT INTO book SET ?', newData, (err, book) => {
         if (err) {
             result(err, book)
         } else {
@@ -97,6 +100,7 @@ Book.Remove = (id, result) => {
 //     })
 // }
 
+//thêm ảnh và file 
 Book.upload = (newData, result) => {
     const db = 'INSERT INTO booK_img_file (book_id, file_path, image_path) VALUES(?,?,?)';
     sql.query(db, newData, (err, book) => {
@@ -110,20 +114,9 @@ Book.upload = (newData, result) => {
     })
 }
 
-Book.category = (id, result) => {
+Book.getCategory = (result) => {
     const db = `
-        SELECT
-        book.book_id,
-        book.book_title,
-        book.price,
-        book_img_file.image_path,
-        book.category_id
-    FROM
-        book
-    LEFT JOIN book_img_file ON book.book_id = book_img_file.book_id
-    LEFT JOIN book_category ON book.category_id = book_category.category_id
-    WHERE
-    book.category_id = ${id}
+    SELECT * FROM book_category
     `
     sql.query(db, (err, book) => {
         if (err) {
@@ -133,4 +126,45 @@ Book.category = (id, result) => {
         }
     })
 }
+Book.getByCategoryID = (id, result) => {
+    const db = `
+    SELECT
+    book.book_id,
+    book.book_title,
+    book.price,
+    book_img_file.image_path,
+    book.category_id,
+    book_category.category_name
+    FROM
+        book
+    LEFT JOIN book_img_file 
+        ON book.book_id = book_img_file.book_id
+    LEFT JOIN book_category 
+        ON book.category_id = book_category.category_id
+    WHERE
+        book.category_id = ${id}
+    `
+    sql.query(db, (err, book) => {
+        if (err) {
+            result(err, null)
+        } else {
+            result(book)
+        }
+    })
+}
+
+Book.addCategory = (newData, result) => {
+    sql.query('INSERT INTO book_category SET ?', newData, (err, category) => {
+        if (err) {
+            result(err, category)
+        } else {
+            result(null, {
+                id: category.insertId, ...newData
+            })
+        }
+    })
+}
+
+
 module.exports = Book;
+
