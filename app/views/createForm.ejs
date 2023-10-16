@@ -161,10 +161,9 @@ h1 {
   
     <button id="renderButton">LOG OUT</button>
 
-    
     <div class="addBook">
-        <form action="/addbook" method="POST">
-                    <label for="bookTitle">Title:</label>
+        <form action="/add_book" method="POST" enctype="multipart/form-data">
+            <label for="bookTitle">Title:</label>
             <input type="text" id="bookTitle" name="bookTitle">
             <br>
             <label for="author">Author:</label>
@@ -176,18 +175,17 @@ h1 {
             <br>
             <label for="price">Price:</label>
             <input type="number" id="price" name="price" step="0.01" min="0" max="1000">
-            
             <br>
             <!-- Add a select element for displaying existing categories -->
             <label for="category">Category:</label>
             <select id="category" name="category">
                 <option value="default">Chọn thể loại</option>
                 <% const uniqueCategories = new Set(); %>
-                <% for (let i = 0; i < dataBook.length; i++) { %>
-                    <% const category = dataBook[i].category_name; %>
+                <% for (let i = 0; i < dataCategory.length; i++) { %>
+                    <% const category = dataCategory[i].category_name; %>
                     <% if (!uniqueCategories.has(category)) { %>
                         <% uniqueCategories.add(category); %>
-                        <option value="<%= dataBook[i].category_id %>"><%= category %></option>
+                        <option value="<%= dataCategory[i].category_id %>"><%= category %></option>
                     <% } %>
                 <% } %>
             </select>
@@ -196,12 +194,26 @@ h1 {
             <label for="newCategory">New Category:</label>
             <input type="text" id="newCategory" name="newCategory">
             <br>
-                    <br>
-            <button type="submit">Add Book</button>
-         </form>
-    </div>
+            <br>
+
+            <h3>Upload File and Image</h3>
             
-    <div class="uploadFile">
+            <div class="form-group">
+                <label for="fileElem">Select File:</label>
+                <input type="file" class="fileElem" name="fileElem" id="fileElem">
+            </div>
+    
+            <div class="form-group">
+                <label for="myImage">Select Image:</label>
+                <input type="file" class="fileElem" name="myImage" id="myImage">
+            </div>
+    
+            <button type="submit">Add Book</button>
+        </form>
+    </div>
+    
+    
+    <div class="uploadFile" hidden>
         <h3>Upload File and Image</h3>
         <form class="fileUpload" action="/upload" method="POST" enctype="multipart/form-data">
             <div class="form-group">
@@ -217,10 +229,6 @@ h1 {
             <button type="submit" class="submitButton">Upload</button>
         </form>
     </div>
-    </div>
-
-
-    
     <script>
         // Lắng nghe sự kiện click trên nút
         document.getElementById("renderButton").addEventListener("click", function() {
@@ -228,6 +236,7 @@ h1 {
             window.location.href = "/logout";
         });
    
+       
     </script>
 
 </body>

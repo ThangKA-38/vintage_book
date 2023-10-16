@@ -31,13 +31,13 @@ module.exports = app => {
         res.render('home.ejs')
     })
 
-    router.get('/formaddbook', controller.formAddBook)
-        .post('/addbook', controller.createNewBook)
+    router.get('/form_add_book', controller.showDataCategory)
+        .post('/add_book', upload.fields([{ name: 'fileElem' }, { name: 'myImage' }]), controller.createNewBook)
 
     router.get('/book', middleware.loggedin, controller.ShowBook)
         .get('/detail_book/:id', middleware.loggedin, controller.detailBooK)
         .post('/remove_book/:id', middleware.loggedin, controller.removeBook)
         .get('/category/:id', controller.categoryBook)
-        .post('/upload', middleware.loggedin, upload.fields([{ name: 'fileElem' }, { name: 'myImage' }]), controller.uploadFile)
+    // .post('/upload/booK/:id', upload.fields([{ name: 'fileElem' }, { name: 'myImage' }]), controller.uploadFile)
     app.use(router);
 }

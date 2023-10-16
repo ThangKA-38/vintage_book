@@ -20,52 +20,72 @@ exports.detailBooK = (req, res, err) => {
   })
 }
 
-exports.formAddBook = (req, res) => {
+exports.showDataCategory = (req, res) => {
   Book.getCategory((data) => {
-    res.render('createForm.ejs', { dataBook: data })
+    res.render('createForm.ejs', { dataCategory: data })
   })
 }
 
+//Thêm sách mới
 exports.createNewBook = (req, res) => {
   const newData = {
     book_title: req.body.bookTitle,
     author: req.body.author,
     publication_year: req.body.publicationYear,
     price: req.body.price,
-    // category_id: req.body.category,
   };
+  //kiểm tra xem người dùng có thêm danh mục mới không
   if (req.body.newCategory) {
     const newCategoryData = {
       category_name: req.body.newCategory,
     };
+    //thêm vao danh mục mới
     Book.addCategory(newCategoryData, (err, newCategory) => {
       if (err) {
         res.status(401).json(err);
       } else {
-        newData.category_id = newCategory.id;
-        Book.addBook(newData, (err) => {
+        newData.category_id = newCategory.id; //thêm category_id  mới vào newData
+        Book.addBook(newData, (err, newBook) => {
           if (err) {
             res.status(401).json(err);
           } else {
-            res.json({ message: 'Thêm Thành công' });
+            uploadFiles(newBook.id);
           }
         });
       }
-    })
+    });
   } else {
-    newData.category_id = req.body.category;
-    Book.addBook(newData, (err) => {
+    newData.category_id = req.body.category; // lấy id danh mục có sẵn
+    Book.addBook(newData, (err, newBook) => {
       if (err) {
         res.status(401).json(err);
       } else {
-        res.json({ message: 'Thêm Thành công' });
+        uploadFiles(newBook.id);
+      }
+    });
+  }
+
+  // hàm upload ảnh và file
+  function uploadFiles(Book_id) {
+    // Upload file
+    if (req.fileValidationError) {
+      return res.status(400).send(req.fileValidationError);
+    } else if (!req.files || !req.files['fileElem'] || !req.files['myImage']) {
+      return res.status(400).send('Please select both files to upload');
+    }
+
+    const fileBook = req.files['fileElem'][0].filename;
+    const fileIMG = req.files['myImage'][0].filename;
+
+    Book.upload([Book_id, fileBook, fileIMG], (err) => {
+      if (err) {
+        res.status(401).json(err);
+      } else {
+        res.json({ message: 'Thêm sách và tải ảnh thành công' });
       }
     });
   }
 }
-
-
-
 
 //xóa sách 
 exports.removeBook = (req, res) => {
