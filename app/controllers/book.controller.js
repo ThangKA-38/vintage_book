@@ -26,6 +26,27 @@ exports.showDataCategory = (req, res) => {
     })
 }
 
+exports.All_CataCategory = (req, res) => {
+    Book.getCategory((data) => {
+        res.json({ category: data })
+    })
+}
+
+//lấy theo danh mục sách cho form add
+exports.categoryAdd = (req, res) => {
+    var id = req.params.id;
+    Book.getByCategoryID(id, (data) => {
+        res.render({ Data: data })
+    })
+}
+//lấy theo danh mục sách
+exports.categoryBook = (req, res) => {
+    var id = req.params.id;
+    Book.getByCategoryID(id, (data) => {
+        res.json({ Data: data })
+    })
+}
+
 //Thêm sách mới
 exports.createNewBook = (req, res) => {
     const newData = {
@@ -111,11 +132,3 @@ exports.uploadFile = (req, res, err) => {
     })
 }
 
-//lấy theo danh mục sách
-exports.categoryBook = (req, res) => {
-    var id = req.params.id;
-    Book.getByCategoryID(id, (data) => {
-        //res.status(200).json({ category: data });
-        res.render({ Data: data })
-    })
-}

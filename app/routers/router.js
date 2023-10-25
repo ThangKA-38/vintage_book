@@ -1,5 +1,7 @@
-module.exports = app =>{
-    require('./vintage.router')(app) ;
+module.exports = app => {
+    require('./vintage.router')(app);
 
     require('./auth.router')(app);
+
+    require('./member.router')(app);
 }

@@ -27,17 +27,19 @@ module.exports = app => {
         res.render('introduction.ejs')
     })
 
-    router.get('/home', middleware.loggedin, (req, res) => {
+    router.get('/home', middleware, (req, res) => {
         res.render('home.ejs')
     })
 
-    router.get('/form_add_book', controller.showDataCategory)
+    router.get('/form_add_book', middleware, controller.showDataCategory)
         .post('/add_book', upload.fields([{ name: 'fileElem' }, { name: 'myImage' }]), controller.createNewBook)
 
-    router.get('/book', middleware.loggedin, controller.ShowBook)
-        .get('/detail_book/:id', middleware.loggedin, controller.detailBooK)
-        .post('/remove_book/:id', middleware.loggedin, controller.removeBook)
+    router.get('/book', controller.ShowBook)
+        .get('/detail_book/:id', controller.detailBooK)
+        .post('/remove_book/:id', controller.removeBook)
+        .get('/categoryForAdd/:id', controller.categoryAdd)
         .get('/category/:id', controller.categoryBook)
+        .get('/all_category', controller.All_CataCategory)
     // .post('/upload/booK/:id', upload.fields([{ name: 'fileElem' }, { name: 'myImage' }]), controller.uploadFile)
     app.use(router);
 }

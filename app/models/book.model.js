@@ -128,7 +128,7 @@ Book.getCategory = (result) => {
 }
 Book.getByCategoryID = (id, result) => {
     const db = `
-    SELECT
+    SELECT 
     book.book_id,
     book.book_title,
     book.price,

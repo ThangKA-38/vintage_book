@@ -3,8 +3,7 @@
 module.exports = (app) => {
     const express = require('express');
     const router = express.Router();
-    const RegisterController = require('../controllers/Register.controller');
-    const LoginController = require('../controllers/Login.controller');
+    const AuthController = require('../controllers/auth/auth.controller');
     const middleware = require('../middleware/auth.middleware');
     const passport = require('passport');
     const db = require('../models/db');
@@ -47,12 +46,12 @@ module.exports = (app) => {
 
     // Register and Login routes
     router
-        .get('/login', middleware.isAuth, LoginController.showLoginForm)
-        .post('/login', LoginController.login)
-        .post('/register', RegisterController.register)
-        .get('/register', middleware.isAuth, RegisterController.create)
-        .get('/listAccount', LoginController.list_account)
-        .get('/logout', middleware.loggedin, LoginController.logout)
+        .get('/login', AuthController.showLoginForm)
+        .post('/login', AuthController.login)
+        .post('/register', AuthController.register)
+        .get('/register', AuthController.create)
+        .get('/listAccount', AuthController.list_account)
+        .get('/logout', AuthController.logout)
         .get('/loginByGoogle');
     // Google OAuth routes
     router

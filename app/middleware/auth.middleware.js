@@ -1,27 +1,18 @@
-exports.loggedin = (req, res, next) => {
-    if (req.session.loggedin) {
-        res.locals.user = req.session.user
-        next();
-    } else {
-        res.redirect('/login')
-    }
-}
+const jwt = require('jsonwebtoken');
+require('dotenv/config');
 
-exports.isAuth = (req, res, next) => {
-    if (req.session.loggedin) {
-        res.locals.user = req.session.user
-        res.redirect('/home');
-    } else {
-        next();
+module.exports = (req, res, next) => {
+    const token = req.headers.authorization;
+    console.log(token);
+    console.log(token);
+    if (!token) {
+        return res.status(401).json({ message: 'Không lấy được token.' });
     }
-}
-
-exports.checkRole = (role) => {
-    return (req, res, next) => {
-        if (req.user && req.user.role === role) {
-            // Người dùng có vai trò tương ứng
-            return next();
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ message: 'không xác minh được.' });
         }
-        res.status(403).json({ message: 'Access denied' });
-    };
-}
+        req.userData = decoded;
+        next();
+    });
+};
