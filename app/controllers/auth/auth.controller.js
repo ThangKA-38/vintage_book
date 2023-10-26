@@ -31,14 +31,16 @@ exports.login = (req, res) => {
                 bcrypt.compare(password, user.password, (err, result) => {
                     if (result) {
                         // Đăng nhập thành công - tạo và trả về JWT token
-                        const token = jwt.sign({
-                            userId: user.id,
-                            userEmail: user.email,
-                            userRole: user.role_id
-                        }, process.env.JWT_SECRET_KEY,
-                            { expiresIn: '1h' });
+                        const jsontoken = jwt.sign(
+                            {
+                                username: user.username,
+                                email: user.email,
+                                role_id: user.role_id
+                            },
+                            process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+                        res.cookie('token', jsontoken, { httpOnly: true, secure: true, SameSite: 'strict', expires: new Date(Number(new Date()) + 30 * 60 * 1000) })
 
-                        res.json({ success: true, message: 'Login successful', token });
+                        res.json({ success: true, message: 'Login successful', jsontoken });
                     } else {
                         res.status(401).json({ error: 'Invalid password' });
                     }
@@ -87,17 +89,23 @@ exports.register = (req, res) => {
                     }
 
                     // Tạo JWT token sau khi đăng ký thành công
-                    const token = jwt.sign(
+                    const jsontoken = jwt.sign(
                         {
-                            userId: newUser.id,
-                            userEmail: newUser.email,
-                            userRole: newUser.role_id
+                            username: newUser.username,
+                            email: newUser.email,
+                            role_id: newUser.role_id
                         },
-                        process.env.JWT_SECRET_KEY,
-                        { expiresIn: '1h' });
-
+                        process.env.JWT_SECRET_KEY, { expiresIn: '1h' }
+                    );
+                    //them token vào cookie
+                    res.cookie('token', jsontoken, {
+                        httpOnly: true,
+                        secure: true,
+                        SameSite: 'strict',
+                        expires: new Date(Number(new Date()) + 30 * 60 * 1000)
+                    })
                     // Trả về dữ liệu của người dùng đã đăng ký và JWT trong JSON response
-                    return res.status(201).json({ user: newUser, token });
+                    return res.status(201).json({ user: newUser, jsontoken });
                 });
             });
         });

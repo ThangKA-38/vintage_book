@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const methodOverride = require('method-override');
-const session = require('express-session');
 const passport = require('passport');
+const session = require('express-session')
+
 
 passport.serializeUser(function (user, cb) {
     cb(null, user);
@@ -32,6 +34,10 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cors({
+    origin: 'http://localhost:3031',
+    credentials: true
+}));
 
 app.set('view engine', 'ejs');
 app.set('views', 'app/views');

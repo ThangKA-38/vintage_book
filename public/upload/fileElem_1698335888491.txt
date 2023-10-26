@@ -1,0 +1,105 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Product
+{
+    string title;
+    long price;
+public:
+    virtual void input(); 
+    virtual void display(); 
+    long getPrice(); 
+};
+
+ void Product:: input() {
+    do
+    {
+        getline(cin, title);
+    } while (this->title.length() == 0);
+    cin >> price;
+}
+ void Product::display() {
+     cout << "+ Title: " << this->title << endl;
+     cout << "+ Price: " << this->price << " VND" << endl;
+ }
+
+ long Product::getPrice() {
+     return this->price;
+ }
+ // lớp laptop
+ class Laptop : public Product
+{
+    string Brand;
+    string CPU;
+    long RAM;
+public:
+    void input();
+    void display();
+   
+};
+ void Laptop::input() {
+     Product::input();
+     do
+     {
+         getline(cin, this->Brand);
+     } while (this->Brand.length() == 0);
+
+     do
+     {
+         getline(cin, this->CPU);
+     } while (this->CPU.length() == 0);
+
+     cin >> RAM;
+ }
+ void Laptop::display()
+ {
+     Product::display();
+     cout << "+ Brand: " << this->Brand << endl;
+     cout << "+ CPU: " << this->CPU << endl;
+     cout << "+ RAM: " << this->RAM << " GB" << endl;
+ }
+ //lớp sách
+ class Book : public Product
+{
+    string ISBN;
+    string Publisher;
+public:
+    void input();
+    void display();
+};
+ void Book :: input()
+ {
+     Product::input();
+     do
+     {
+         getline(cin, this->ISBN);
+     } while (this->ISBN.length() == 0);
+
+     do
+     {
+         getline(cin, this->Publisher);
+     } while (this->Publisher.length() == 0);
+ }
+
+ void Book::display()
+ {
+     Product::display();
+     cout << "+ ISBN: " << this->ISBN << endl;
+     cout << "+ Publisher: " << this->Publisher << endl;
+ }
+int main()
+{
+    Laptop lap;
+    lap.input();
+    lap.display();
+
+    cout << endl;
+
+    Book book;
+    book.input();
+    book.display();
+
+    return 0;
+}
+

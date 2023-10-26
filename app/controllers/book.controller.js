@@ -98,11 +98,13 @@ exports.createNewBook = (req, res) => {
         const fileBook = req.files['fileElem'][0].filename;
         const fileIMG = req.files['myImage'][0].filename;
 
+        const bookFilePath = `/public/upload/${fileBook}`;
+        const imageFilePath = `/public/upload/${fileIMG}`;
         Book.upload([Book_id, fileBook, fileIMG], (err) => {
             if (err) {
                 res.status(401).json(err);
             } else {
-                res.json({ message: 'Thêm sách và tải ảnh thành công' });
+                res.json({ data: [Book_id, bookFilePath, imageFilePath] });
             }
         });
     }
@@ -127,8 +129,13 @@ exports.uploadFile = (req, res, err) => {
     Book_id = req.params.id;
     var fileBook = req.files['fileElem'][0].filename;
     var fileIMG = req.files['myImage'][0].filename;
+    // Construct the file paths
+    const bookFilePath = `/public/upload/${fileBook}`;
+    const imageFilePath = `/public/upload/${fileIMG}`;
+
     Book.upload([Book_id, fileBook, fileIMG], () => {
-        res.json({ data: [Book_id, fileBook, fileIMG] })
-    })
+        // Return the file paths in the response
+        res.json({ data: [Book_id, bookFilePath, imageFilePath] });
+    });
 }
 

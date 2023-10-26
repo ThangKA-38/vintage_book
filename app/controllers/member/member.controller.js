@@ -13,15 +13,15 @@ exports.addNewInfor = (req, res) => {
         gender: req.body.gender,
         avatar: req.file ? req.file.filename : null
     }
+    console.log(newData.avatar);
     Member.addInfor(newData, (err) => {
         if (err) {
             console.log(err);
             res.json({ error: 'An error occurred while adding' });
         } else {
             console.log('User added to the database');
-            res.json({ message: 'Adding successfully' });
+            const uploadedImagePath = req.file ? `/public/upload/${req.file.filename}` : null;
+            res.status(200).json({ message: 'Adding successfully', avatar: uploadedImagePath });
         }
     })
-
-
 }

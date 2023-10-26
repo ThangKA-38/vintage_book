@@ -4,7 +4,7 @@ module.exports = (app) => {
     const express = require('express');
     const router = express.Router();
     const AuthController = require('../controllers/auth/auth.controller');
-    const middleware = require('../middleware/auth.middleware');
+    const cookieParser = require('cookie-parser');
     const passport = require('passport');
     const db = require('../models/db');
 
@@ -54,41 +54,42 @@ module.exports = (app) => {
         .get('/logout', AuthController.logout)
         .get('/loginByGoogle');
     // Google OAuth routes
-    router
-        .get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
-        .get('/auth/google/callback', (req, res, next) => {
-            passport.authenticate('google', (err, user, info) => {
-                if (err) {
-                    return res.status(500).json({ message: 'Error during Google OAuth authentication.' });
-                }
-                if (!user) {
-                    return res.status(401).json({ message: 'Authentication failed.' });
-                }
-                req.logIn(user, (loginErr) => {
-                    if (loginErr) {
-                        return next(loginErr);
-                    }
-                    res.status(201).json({ user });
+    // router
+    //     .get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
+    //     .get('/auth/google/callback', (req, res, next) => {
+    //         passport.authenticate('google', (err, user, info) => {
+    //             if (err) {
+    //                 return res.status(500).json({ message: 'Error during Google OAuth authentication.' });
+    //             }
+    //             if (!user) {
+    //                 return res.status(401).json({ message: 'Authentication failed.' });
+    //             }
+    //             req.logIn(user, (loginErr) => {
+    //                 if (loginErr) {
+    //                     return next(loginErr);
+    //                 }
+    //                 res.status(201).json({ user });
 
-                });
-            })(req, res, next);
-        });
+    //             });
+    //         })(req, res, next);
+    //     });
 
-    // Error route
-    router.get('/error', (req, res) => res.send('Error logging in'));
+    // // Error route
+    // router.get('/error', (req, res) => res.send('Error logging in'));
 
-    // Route to fetch Google OAuth users
-    router.get('/ggUser', (req, res) => {
-        db.query('SELECT * FROM google', (err, users) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).send('Database query error');
-            } else {
-                return res.render('ggUser', { dataUser: users });
-            }
-        });
-    });
+    // // Route to fetch Google OAuth users
+    // router.get('/ggUser', (req, res) => {
+    //     db.query('SELECT * FROM google', (err, users) => {
+    //         if (err) {
+    //             console.error(err);
+    //             return res.status(500).send('Database query error');
+    //         } else {
+    //             return res.render('ggUser', { dataUser: users });
+    //         }
+    //     });
+    // });
 
     // Mount the router in the app
+    app.use(cookieParser());
     app.use('/', router);
 };
