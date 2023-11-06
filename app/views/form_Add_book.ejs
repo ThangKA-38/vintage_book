@@ -181,11 +181,11 @@ h1 {
             <select id="category" name="category">
                 <option value="default">Chọn thể loại</option>
                 <% const uniqueCategories = new Set(); %>
-                <% for (let i = 0; i < dataCategory.length; i++) { %>
-                    <% const category = dataCategory[i].category_name; %>
+                <% for (let i = 0; i < Data.length; i++) { %>
+                    <% const category = Data[i].category_name; %>
                     <% if (!uniqueCategories.has(category)) { %>
                         <% uniqueCategories.add(category); %>
-                        <option value="<%= dataCategory[i].category_id %>"><%= category %></option>
+                        <option value="<%= Data[i].category_id %>"><%= category %></option>
                     <% } %>
                 <% } %>
             </select>
@@ -194,8 +194,23 @@ h1 {
             <label for="newCategory">New Category:</label>
             <input type="text" id="newCategory" name="newCategory">
             <br>
+            <label for="supplier">Supplier:</label>
+            <select id="supplier" name="supplier">
+                <option value="default">Chọn nhà cung cấp</option>
+                <% const uniqueSupplier = new Set(); %>
+                <% for (let i = 0; i < Data.length; i++) { %>
+                    <% const supplier = Data[i].supplier_name; %>
+                    <% if (!uniqueSupplier.has(supplier)) { %>
+                        <% uniqueSupplier.add(supplier); %>
+                        <option value="<%= Data[i].supplier_id %>"><%= supplier %></option>
+                    <% } %>
+                <% } %>
+            </select>
             <br>
-
+            <label for="newSupplier">New Supplier:</label>
+            <input type="text" id="newSupplier" name="newSupplier">
+            <br>
+            <br>
             <h3>Upload File and Image</h3>
             
             <div class="form-group">

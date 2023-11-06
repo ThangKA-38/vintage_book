@@ -1,5 +1,5 @@
 module.exports = app => {
-    require('./vintage.router')(app);
+    require('./book.router')(app);
 
     require('./auth.router')(app);
 

@@ -116,7 +116,10 @@ Book.upload = (newData, result) => {
 
 Book.getCategory = (result) => {
     const db = `
-    SELECT * FROM book_category
+    SELECT c.category_id,c.category_name, s.supplier_id,s.supplier_name,s.supplier_name,s.address
+    FROM book_category c 
+    LEFT JOIN book b ON b.category_id = c.category_id 
+    LEFT JOIN book_supplier s ON s.supplier_id = b.book_id
     `
     sql.query(db, (err, book) => {
         if (err) {
@@ -160,6 +163,19 @@ Book.addCategory = (newData, result) => {
         } else {
             result(null, {
                 id: category.insertId, ...newData
+            })
+        }
+    })
+}
+
+// thêm mới nhà cung cấp
+Book.addSupplier = (newData, result) => {
+    sql.query('INSERT INTO book_supplier SET ?', newData, (err, supplier) => {
+        if (err) {
+            result(err, supplier)
+        } else {
+            result(null, {
+                id: supplier.insertId, ...newData
             })
         }
     })
