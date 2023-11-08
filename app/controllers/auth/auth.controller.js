@@ -33,6 +33,7 @@ exports.login = (req, res) => {
                         // Đăng nhập thành công - tạo và trả về JWT token
                         const jsontoken = jwt.sign(
                             {
+                                account_id: user.account_id,
                                 username: user.username,
                                 email: user.email,
                                 role_id: user.role_id
@@ -91,6 +92,7 @@ exports.register = (req, res) => {
                     // Tạo JWT token sau khi đăng ký thành công
                     const jsontoken = jwt.sign(
                         {
+                            account_id: newUser.account_id,
                             username: newUser.username,
                             email: newUser.email,
                             role_id: newUser.role_id

@@ -19,7 +19,6 @@ exports.authAdmin = (req, res, next) => {
 
             } else {
                 const role_id = authData.role_id;
-                console.log(role_id);
                 if (role_id === 1) {
                     next();
                 } else {
@@ -50,7 +49,7 @@ exports.authMember = (req, res, next) => {
 
             } else {
                 const role_id = authData.role_id;
-                if (role_id === 2 && role_id === 1) {
+                if (role_id === 2 || role_id === 1) {
                     next();
                 } else {
                     return res.status(401).json({

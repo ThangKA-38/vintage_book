@@ -116,10 +116,9 @@ Book.upload = (newData, result) => {
 
 Book.getCategory = (result) => {
     const db = `
-    SELECT c.category_id,c.category_name, s.supplier_id,s.supplier_name,s.supplier_name,s.address
-    FROM book_category c 
-    LEFT JOIN book b ON b.category_id = c.category_id 
-    LEFT JOIN book_supplier s ON s.supplier_id = b.book_id
+    SELECT * FROM book_category ;
+    
+    SELECT * FROM book_supplier;
     `
     sql.query(db, (err, book) => {
         if (err) {

@@ -18,6 +18,22 @@ Member.addInfor = (newData, result) => {
     })
 }
 
+Member.getUserById = (id, callback) => {
+    const db = `
+    SELECT U.user_id, U.fullName, U.address, U.phone_number, U.birth_date, U.gender, U.avatar, U.created_at
+    FROM user_info U 
+    LEFT JOIN account A ON U.account_id = A.account_id
+    WHERE U.account_id = ${id}
+    `;
 
+    sql.query(db, (err, user) => {
+        if (err) {
+            console.error(err);
+            callback(err, null);
+        } else {
+            callback(null, user);
+        }
+    });
+}
 
 module.exports = Member

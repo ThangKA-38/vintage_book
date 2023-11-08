@@ -89,7 +89,7 @@ module.exports = app => {
         console.log(vnp_Params);
         if (secureHash === signed) {
             //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-            // const vnp_ResponseCode = vnp_Params['vnp_ResponseCode'];
+            const vnp_ResponseCode = vnp_Params['vnp_ResponseCode'];
             // const receipt_Data = {
             //     receipt_id: vnp_Params['vnp_TxnRef'],
             //     amount: vnp_Params['vnp_Amount'] * 100,

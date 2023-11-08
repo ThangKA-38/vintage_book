@@ -83,6 +83,15 @@ exports.createNewBook = (req, res) => {
         addNewBook(newData)
     }
     // hàm upload ảnh và ảnh
+    console.log(newData);
+    if (req.body.newCategory) {
+
+    }
+    else {
+        newData.category_id = req.body.category; // lấy id danh mục có sẵn
+        newData.supplier_id = req.body.supplier;
+        addNewBook(newData)
+    }
     function uploadFiles(Book_id) {
         // Upload file
         if (req.fileValidationError) {
